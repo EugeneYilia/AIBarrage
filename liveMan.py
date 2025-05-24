@@ -302,7 +302,7 @@ class DouyinLiveWebFetcher:
         import json
 
         # 请求地址
-        url = "https://127.0.0.1:8898/eb_stream"
+        url = "http://127.0.0.1:8898/eb_stream"
 
         # 请求体 payload
         payload = {
