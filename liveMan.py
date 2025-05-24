@@ -297,6 +297,37 @@ class DouyinLiveWebFetcher:
         user_id = message.user.id
         content = message.content
         print(f"【聊天msg】[{user_id}]{user_name}: {content}")
+
+        import requests
+        import json
+
+        # 请求地址
+        url = "https://127.0.0.1:8898/eb_stream"
+
+        # 请求体 payload
+        payload = {
+            "input_mode": "text",
+            "question": f"{content}",
+            "voice_id": "male",
+            "voice_speed": ""
+        }
+
+        # 可选：如果你本地服务器使用的是自签名证书，需关闭 SSL 校验
+        try:
+            response = requests.post(
+                url,
+                headers={"Content-Type": "application/json"},
+                data=json.dumps(payload),
+                verify=False  # 自签名证书时必须设为 False，否则会报 SSL 错误
+            )
+
+            # 输出结果
+            print("状态码:", response.status_code)
+            print("返回内容:")
+            print(response.text)
+
+        except requests.exceptions.RequestException as e:
+            print("请求失败:", e)
     
     def _parseGiftMsg(self, payload):
         """礼物消息"""
