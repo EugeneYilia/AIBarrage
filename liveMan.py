@@ -309,7 +309,8 @@ class DouyinLiveWebFetcher:
             "input_mode": "text",
             "question": f"{content}",
             "voice_id": "male",
-            "voice_speed": ""
+            "voice_speed": "",
+            "is_local_test": False
         }
 
         # 可选：如果你本地服务器使用的是自签名证书，需关闭 SSL 校验
