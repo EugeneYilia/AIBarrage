@@ -24,6 +24,12 @@ import websocket
 from py_mini_racer import MiniRacer
 
 from protobuf.douyin import *
+import requests
+import json
+
+
+# 请求地址
+dh_url = "http://127.0.0.1:8898/eb_stream"
 
 
 @contextmanager
@@ -298,12 +304,6 @@ class DouyinLiveWebFetcher:
         content = message.content
         print(f"【聊天msg】[{user_id}]{user_name}: {content}")
 
-        import requests
-        import json
-
-        # 请求地址
-        url = "http://127.0.0.1:8898/eb_stream"
-
         # 请求体 payload
         payload = {
             "input_mode": "text",
@@ -316,7 +316,7 @@ class DouyinLiveWebFetcher:
         # 可选：如果你本地服务器使用的是自签名证书，需关闭 SSL 校验
         try:
             response = requests.post(
-                url,
+                dh_url,
                 headers={"Content-Type": "application/json"},
                 data=json.dumps(payload),
                 verify=False  # 自签名证书时必须设为 False，否则会报 SSL 错误
@@ -324,9 +324,7 @@ class DouyinLiveWebFetcher:
 
             # 输出结果
             print("状态码:", response.status_code)
-            print("返回内容:")
-            print(response.text)
-
+            print("返回内容:", response.text)
         except requests.exceptions.RequestException as e:
             print("请求失败:", e)
     
@@ -352,6 +350,30 @@ class DouyinLiveWebFetcher:
         user_id = message.user.id
         gender = ["女", "男"][message.user.gender]
         print(f"【进场msg】[{user_id}][{gender}]{user_name} 进入了直播间")
+
+        # 请求体 payload
+        payload = {
+            "input_mode": "text",
+            "question": f"欢迎{user_name}{'靓女' if gender == '女' else '靓仔'}进入直播间",
+            "voice_id": "male",
+            "voice_speed": "",
+            "is_local_test": False
+        }
+
+        # 可选：如果你本地服务器使用的是自签名证书，需关闭 SSL 校验
+        try:
+            response = requests.post(
+                dh_url,
+                headers={"Content-Type": "application/json"},
+                data=json.dumps(payload),
+                verify=False  # 自签名证书时必须设为 False，否则会报 SSL 错误
+            )
+
+            # 输出结果
+            print("状态码:", response.status_code)
+            print("返回内容:", response.text)
+        except requests.exceptions.RequestException as e:
+            print("请求失败:", e)
     
     def _parseSocialMsg(self, payload):
         '''关注消息'''
