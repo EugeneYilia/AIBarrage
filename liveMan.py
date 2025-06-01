@@ -29,7 +29,7 @@ import json
 
 
 # 请求地址
-dh_url = "http://127.0.0.1:8898/eb_stream"
+dh_url = "http://127.0.0.1/eb_stream"
 
 
 @contextmanager
